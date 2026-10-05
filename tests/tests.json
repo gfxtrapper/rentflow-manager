@@ -1,0 +1,99 @@
+[
+  {
+    "name": "Sign in and create a property",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "authentication",
+      "property creation",
+      "backend POST /api/properties",
+      "database persistence"
+    ],
+    "description": "Verifies a signed-in manager can create a property and see it in the property list.",
+    "steps": [
+      "Sign in to RentFlow Manager",
+      "Open Properties and add a property named \"Sunrise Apartments\" with location \"Bungoma\"",
+      "Return to the Properties list"
+    ],
+    "expected": "The property list shows \"Sunrise Apartments\" and its saved location."
+  },
+  {
+    "name": "Create and retain rental operations records",
+    "viewport": "desktop",
+    "covers": [
+      "unit creation",
+      "tenant creation",
+      "lease creation",
+      "rent payment creation",
+      "backend CRUD routes",
+      "persistence after reload"
+    ],
+    "description": "Verifies the main rental records can be created and remain available after a page refresh.",
+    "setup": ["Create a property named \"Sunrise Apartments\""],
+    "steps": [
+      "Add unit \"A01\" with monthly rent 12000",
+      "Add tenant \"Jane Wanjiku\"",
+      "Add a lease connecting the tenant and unit",
+      "Add a rent payment of 12000 dated 2026-10-05",
+      "Refresh the page"
+    ],
+    "expected": "The unit, tenant, lease and payment records remain visible in their respective sections after refresh."
+  },
+  {
+    "name": "Update and delete an expense",
+    "viewport": "desktop",
+    "covers": [
+      "expense update",
+      "expense deletion",
+      "destructive-action confirmation",
+      "backend PUT and DELETE /api/expenses"
+    ],
+    "description": "Verifies expense records can be edited and intentionally deleted.",
+    "setup": ["Create an expense for \"Plumbing\" with amount 5000"],
+    "steps": [
+      "Edit the expense amount to 4500 and save",
+      "Delete the expense",
+      "Confirm deletion"
+    ],
+    "expected": "The updated amount is saved before deletion, and the deleted expense no longer appears in the expense list."
+  },
+  {
+    "name": "Reject invalid maintenance workflow",
+    "viewport": "mobile",
+    "covers": [
+      "maintenance records",
+      "required-field validation",
+      "mobile rental management workflow"
+    ],
+    "description": "Verifies the maintenance form is usable on mobile and blocks an empty issue before any backend write.",
+    "steps": [
+      "Open Maintenance on a mobile viewport",
+      "Choose Add maintenance and leave the Unit ID field blank",
+      "Submit the record"
+    ],
+    "expected": "A required-field message appears and no maintenance record is created."
+  },
+  {
+    "name": "Show portfolio financial snapshot",
+    "viewport": "desktop",
+    "covers": [
+      "dashboard",
+      "rent collection totals",
+      "expense totals",
+      "net cash flow",
+      "maintenance status"
+    ],
+    "description": "Verifies the dashboard aggregates persisted rent payments and expenses into a useful portfolio snapshot.",
+    "setup": [
+      "Create a rent payment of 12000",
+      "Create an expense of 3000",
+      "Create an open maintenance request"
+    ],
+    "steps": [
+      "Open Dashboard",
+      "Review the financial snapshot",
+      "Review the maintenance section"
+    ],
+    "expected": "Dashboard shows KSh 12,000 collected, KSh 3,000 expenses, KSh 9,000 net cash flow, and the open maintenance request."
+  }
+]
